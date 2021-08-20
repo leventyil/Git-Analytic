@@ -1,0 +1,60 @@
+﻿<html>
+<head>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+    <div class="col-4">
+        <form class="form-group" action="https://localhost:5003/home" method="post" name="getGrid">
+            <label><b>User/Organization</b></label>
+            <br />
+            @Html.DropDownList("User", (IEnumerable<SelectListItem>)ViewBag.userNames, new { @id = "Organization", @class = "form-control", @onchange = "document.cookie = 'orgCookie = ' + this.selectedIndex + '; path=/;' + 'expires= Fri, 31 Dec 9999 23:59:59 GMT'" })
+            <br />
+            <a class="btn btn-primary" href="#" id="getOrg">Get Repositories</a>
+        </form>
+    </div>
+
+    <div id="repoDiv">
+
+    </div>
+
+    <div id="postDiv">
+
+    </div>
+
+        <script>
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+            window.onload = function () { document.getElementById("Organization").selectedIndex = readCookie("orgCookie"); }
+        </script>
+        <script>
+    $('#getOrg').click(function (e) {
+
+                e.preventDefault();
+                var select = $("#Organization option:selected").val();
+
+                $.ajax({
+                    url: '@Url.Action("Post", "Home")',
+                    type: "POST",
+                    data: { 'User': select },
+                    dataType: "text",
+                    success: function (result) {
+                        $("#repoDiv").html(result);
+                    },
+                    error: function (xhr, status) {
+                        alert(status);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

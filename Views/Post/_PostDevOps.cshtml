@@ -1,0 +1,106 @@
+﻿
+@if (ViewBag.List != null)
+{
+    <br />
+    <br />
+    <div class="col-12">
+        <table class="table table-bordered" style="margin-top: 15px">
+            <caption style="caption-side: top; color:black"><b>Last 10 Pull Requests</b></caption>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>State</th>
+                    <th>Created At</th>
+                    <th>Closed At</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var data in ViewBag.List)
+                {
+                    <tr>
+                        <td>@data.PullRequestId</td>
+                        <td>@data.Title</td>
+                        <td>@data.CreatedBy.DisplayName</td>
+                        <td>@data.Status</td>
+                        <td>@data.CreationDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            @if (data.ClosedDate != ViewBag.nullTime)
+                            {
+                                @data.ClosedDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                            }
+                            else
+                            {
+                                <text>---</text>
+                            }
+                        </td>
+                        <td>
+                            @if (data.ClosedDate != ViewBag.nullTime)
+                            {
+                                @if ((data.ClosedDate - data.CreationDate).Days != 0)
+                                {
+                                    @((data.ClosedDate - data.CreationDate).Days) <text> Days </text>;
+                                }
+                                @if ((data.ClosedDate - data.CreationDate).Hours != 0)
+                                {
+                                    @((data.ClosedDate - data.CreationDate).Hours) <text> Hours </text>;
+                                }
+                                @if ((data.ClosedDate - data.CreationDate).Minutes != 0)
+                                {
+                                    @((data.ClosedDate - data.CreationDate).Minutes) <text> Minutes </text>;
+                                }
+                                else if ((data.ClosedDate - data.CreationDate).Seconds != 0)
+                                {
+                                    @((data.ClosedDate - data.CreationDate).Seconds) <text> Seconds </text>;
+                                }
+                            }
+                            else
+                            {
+                                <text>---</text>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-4">
+        <br />
+        <br />
+        <h4>
+            There is no pull request.
+        </h4>
+    </div>
+}
+
+@{
+    var Dictionary = (Dictionary<string, int>)ViewData["dictionary"];
+}
+<br />
+<br />
+<div class="col-6">
+    <table class="table table-bordered" style="margin-top: 15px">
+        <caption style="caption-side: top; color:black"><b>Top 10 Contributors</b></caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Commits</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Dictionary.OrderByDescending(i => i.Value).Take(10))
+            {
+                <tr>
+                    <td>@item.Key</td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
