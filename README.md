@@ -1,5 +1,5 @@
 # Git-Analytic
-This is an application that gives you information about pull requests and commits in a Github or Azure DevOps repository with using GraphQL and REST API’s.
+An application that gives you information about pull requests and commits in a Github or Azure DevOps repository with using GraphQL and REST API’s.
 
 <img src="https://i.imgur.com/kUN1Qps.jpg" width="600" height="500">
 
